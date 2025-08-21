@@ -32,7 +32,7 @@ import org.springframework.data.annotation.Version;
 @AllArgsConstructor
 @Entity
 @Table(name = "expenses", indexes = { @Index(name = "ux_expenses_expense_id", columnList = "expenseId", unique = true),
-		@Index(name = "ix_expenses_group_id", columnList = "group_id_fk") })
+		@Index(name = "ix_expenses_group_id", columnList = "group_id") })
 public class Expense implements Serializable {
 
 	@Serial

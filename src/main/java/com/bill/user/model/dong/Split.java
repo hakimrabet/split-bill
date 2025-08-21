@@ -21,8 +21,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "splits", indexes = { @Index(name = "ix_splits_expense_id", columnList = "expense_id_fk"),
-		@Index(name = "ix_splits_user_id", columnList = "user_id_fk") })
+@Table(name = "splits", indexes = { @Index(name = "ix_splits_expense_id", columnList = "expense_id"),
+		@Index(name = "ix_splits_user_id", columnList = "user_id") })
 public class Split implements Serializable {
 
 	@Id
@@ -33,11 +33,11 @@ public class Split implements Serializable {
 	private String splitId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id_fk", nullable = false)
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "expense_id_fk", nullable = false)
+	@JoinColumn(name = "expense_id", nullable = false)
 	private Expense expense;
 
 	private Long creditAmount;

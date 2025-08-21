@@ -47,8 +47,8 @@ public class Group implements Serializable {
 	private User createdBy;
 
 	@ManyToMany
-	@JoinTable(name = "group_members", joinColumns = @JoinColumn(name = "group_id_fk"),
-			inverseJoinColumns = @JoinColumn(name = "user_id_fk"))
+	@JoinTable(name = "group_members", joinColumns = @JoinColumn(name = "group_id"),
+			inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private List<User> members = new ArrayList<>();
 
 	private String icon;
