@@ -14,4 +14,5 @@ public class AddUserModel {
 	private String username;
 
 	private String password;
+
 }

@@ -11,13 +11,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -31,4 +31,5 @@ public class User {
 	@Column(nullable = false)
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
+
 }

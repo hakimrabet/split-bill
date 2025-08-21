@@ -1,5 +1,6 @@
 package com.bill.user.model.user.dao;
 
+import java.util.List;
 
 import com.bill.user.model.user.User;
 
@@ -8,7 +9,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserDao extends JpaRepository<User, Long> {
+
 	boolean existsByUsername(String username);
 
 	User findByUsername(String userName);
+
+	List<User> findAllByIdIn(List<Long> Ids);
 }

@@ -13,6 +13,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserServiceMapper {
+
 	default UsersResult toUsersResult(List<UserInfo> users) {
 		var result = new UsersResult();
 		result.setUsers(users);

@@ -1,6 +1,5 @@
 package com.bill.user.exception;
 
-
 import com.bill.user.common.ResultStatus;
 
 public class UserNotFoundException extends BusinessException {
@@ -13,4 +12,5 @@ public class UserNotFoundException extends BusinessException {
 	public ResultStatus getResultStatus() {
 		return ResultStatus.USER_NOT_FOUND;
 	}
+
 }

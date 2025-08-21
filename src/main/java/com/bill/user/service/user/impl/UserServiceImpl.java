@@ -65,9 +65,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String login(LoginModel model) {
-		Authentication authenticate = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(model.getUsername(), model.getPassword())
-		);
+		Authentication authenticate = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(model.getUsername(), model.getPassword()));
 
 		if (authenticate.isAuthenticated()) {
 			CustomUserDetails userDetails = (CustomUserDetails) authenticate.getPrincipal();
@@ -76,4 +75,5 @@ public class UserServiceImpl implements UserService {
 
 		return "failure";
 	}
+
 }

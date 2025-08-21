@@ -9,5 +9,7 @@ import lombok.ToString;
 @Getter
 @ToString(callSuper = true)
 public class UserResponse extends ResponseService {
+
 	private UserDto user;
+
 }

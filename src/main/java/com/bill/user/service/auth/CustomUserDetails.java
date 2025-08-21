@@ -4,18 +4,16 @@ import java.util.Collection;
 import java.util.Collections;
 
 import com.bill.user.model.user.User;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
 	private final User user;
-
-	public CustomUserDetails(User user) {
-		this.user = user;
-	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -55,4 +53,5 @@ public class CustomUserDetails implements UserDetails {
 	public Long getUserId() {
 		return user.getId();
 	}
+
 }

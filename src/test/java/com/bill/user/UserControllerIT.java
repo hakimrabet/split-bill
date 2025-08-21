@@ -2,12 +2,15 @@ package com.bill.user;
 
 import com.bill.user.api.rest.user.model.request.RegisterUserRequest;
 import com.bill.user.api.rest.user.model.response.UserResponse;
+import com.bill.user.model.user.dao.UserDao;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -18,7 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 class UserControllerIT extends AbstractContainerBaseTest {
 
 	@Autowired
-	private TestRestTemplate restTemplate;
+	private UserDao userDao;
+
+	@BeforeEach
+	void setUp() {
+		userDao.deleteAll();
+	}
 
 	@Test
 	void whenCreateUser_thenReturns201() {
@@ -27,11 +35,11 @@ class UserControllerIT extends AbstractContainerBaseTest {
 		request.setName("Test User");
 		request.setPassword("password123");
 
-		ResponseEntity<UserResponse> response = restTemplate.postForEntity(
-				"/api/users/register",
-				new HttpEntity<>(request),
-				UserResponse.class
-		);
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity<?> entity = new HttpEntity<>(request, headers);
+
+		ResponseEntity<UserResponse> response = restTemplate.exchange("/api/users/register", HttpMethod.POST,
+				entity, UserResponse.class);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("test@example.com", response.getBody()
@@ -45,4 +53,5 @@ class UserControllerIT extends AbstractContainerBaseTest {
 				.getName()
 				.isEmpty(), "User Id should not be empty after save");
 	}
+
 }

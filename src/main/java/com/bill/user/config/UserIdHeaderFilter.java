@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-
 @Component
 public class UserIdHeaderFilter extends OncePerRequestFilter {
 
@@ -24,8 +23,8 @@ public class UserIdHeaderFilter extends OncePerRequestFilter {
 	private SecurityUtils securityUtils;
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-			FilterChain filterChain) throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
 
 		String authHeader = request.getHeader("Authorization");
 
@@ -45,9 +44,10 @@ public class UserIdHeaderFilter extends OncePerRequestFilter {
 	}
 
 	private static class UserIdRequestWrapper extends HttpServletRequestWrapper {
+
 		private final Long userId;
 
-		public UserIdRequestWrapper(HttpServletRequest request, Long userId) {
+		UserIdRequestWrapper(HttpServletRequest request, Long userId) {
 			super(request);
 			this.userId = userId;
 		}
@@ -74,5 +74,7 @@ public class UserIdHeaderFilter extends OncePerRequestFilter {
 			names.add("X-User-Id");
 			return Collections.enumeration(names);
 		}
+
 	}
+
 }

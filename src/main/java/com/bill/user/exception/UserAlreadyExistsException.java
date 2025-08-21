@@ -1,6 +1,5 @@
 package com.bill.user.exception;
 
-
 import com.bill.user.common.ResultStatus;
 
 public class UserAlreadyExistsException extends BusinessException {
@@ -13,4 +12,5 @@ public class UserAlreadyExistsException extends BusinessException {
 	public ResultStatus getResultStatus() {
 		return ResultStatus.USER_DUPLICATE_USERNAME;
 	}
+
 }

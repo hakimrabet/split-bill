@@ -1,10 +1,8 @@
 package com.bill.user.exception;
 
-
 import com.bill.user.common.ResultStatus;
 
 public abstract class BusinessException extends Exception {
-	private static final long serialVersionUID = -3749766539158141005L;
 
 	public BusinessException(String message) {
 		super(message);
@@ -19,4 +17,5 @@ public abstract class BusinessException extends Exception {
 	}
 
 	public abstract ResultStatus getResultStatus();
+
 }

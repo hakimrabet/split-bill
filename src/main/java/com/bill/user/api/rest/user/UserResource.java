@@ -1,6 +1,5 @@
 package com.bill.user.api.rest.user;
 
-
 import com.bill.user.api.rest.user.mapper.UserResourceMapper;
 import com.bill.user.api.rest.user.model.request.LoginUserRequest;
 import com.bill.user.api.rest.user.model.request.RegisterUserRequest;
@@ -26,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserResource {
 
@@ -34,8 +33,10 @@ public class UserResource {
 
 	private final UserResourceMapper mapper;
 
-	@PostMapping(path = "/register", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public UserResponse registerUser(@Valid @RequestBody RegisterUserRequest request) throws UserAlreadyExistsException {
+	@PostMapping(path = "/register", produces = MediaType.APPLICATION_JSON_VALUE,
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	public UserResponse registerUser(@Valid @RequestBody RegisterUserRequest request)
+			throws UserAlreadyExistsException {
 		var result = service.registerUser(mapper.toAddUserModel(request));
 		return mapper.toUserResponse(result);
 	}
@@ -62,4 +63,5 @@ public class UserResource {
 	public UsersResponse getAllUsers() {
 		return mapper.toUsersResponse(service.getAllUsers());
 	}
+
 }

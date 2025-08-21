@@ -3,15 +3,14 @@ package com.bill.user.common;
 import java.io.IOException;
 import java.util.Properties;
 
+import lombok.Getter;
+
+@Getter
 public enum ResultStatus {
 
-	SUCCESS(0, "success"),
-	UNKNOWN(1, "unknown.error"),
-	FAILURE(2, "failure"),
-	USER_DUPLICATE_USERNAME(3, "user.duplicate.username"),
-	INVALID_PARAMETER(4, "core.invalid.parameter.exception"),
-	FORBIDDEN_REQUEST(5, "forbidden.request"),
-	USER_NOT_FOUND(6, "user.not.found");
+	SUCCESS(0, "success"), UNKNOWN(1, "unknown.error"), FAILURE(2, "failure"),
+	USER_DUPLICATE_USERNAME(3, "user.duplicate.username"), INVALID_PARAMETER(4, "core.invalid.parameter.exception"),
+	FORBIDDEN_REQUEST(5, "forbidden.request"), USER_NOT_FOUND(6, "user.not.found");
 
 	private final String description;
 
@@ -23,15 +22,8 @@ public enum ResultStatus {
 		this.description = errorMsg != null ? errorMsg : description;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
 	private static final class MessageHolder {
+
 		private static final Properties ERROR_MESSAGE_PROPERTIES = new Properties();
 
 		static {
@@ -41,5 +33,7 @@ public enum ResultStatus {
 				throw new ExceptionInInitializerError(e);
 			}
 		}
+
 	}
+
 }

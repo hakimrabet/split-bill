@@ -16,6 +16,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", imports = { ResultStatus.class })
 public interface UserResourceMapper {
+
 	@Mapping(target = "users", source = "users")
 	@Mapping(target = "result", expression = "java(ResultStatus.SUCCESS)")
 	UsersResponse toUsersResponse(UsersResult result);
@@ -23,7 +24,6 @@ public interface UserResourceMapper {
 	@Mapping(target = "user", source = "user")
 	@Mapping(target = "result", expression = "java(ResultStatus.SUCCESS)")
 	UserResponse toUserResponse(UserResult result);
-
 
 	@Mapping(target = "id", source = "id")
 	@Mapping(target = "name", source = "name")
@@ -38,4 +38,5 @@ public interface UserResourceMapper {
 	@Mapping(target = "username", source = "username")
 	@Mapping(target = "password", source = "password")
 	LoginModel toLoginModel(LoginUserRequest request);
+
 }

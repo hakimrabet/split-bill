@@ -1,4 +1,4 @@
-package com.bill.user.handler;
+package com.bill.user.api.handler;
 
 import java.security.InvalidParameterException;
 
@@ -22,22 +22,20 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
 	private final Environment environment;
 
 	@ExceptionHandler(BusinessException.class)
 	public final ResponseEntity<ResponseService> handleBusinessException(BusinessException ex, WebRequest request) {
 		logger.error("business exception occurred", ex);
-		return ResponseEntity.unprocessableEntity()
-				.body(new GeneralResponse(ex.getResultStatus()));
+		return ResponseEntity.unprocessableEntity().body(new GeneralResponse(ex.getResultStatus()));
 	}
 
 	@ExceptionHandler(InvalidParameterException.class)
 	public final ResponseEntity<ResponseService> handleInvalidParameterException(InvalidParameterException ex) {
 		logger.error("invalid param error", ex);
-		return ResponseEntity.unprocessableEntity()
-				.body(new GeneralResponse(ResultStatus.INVALID_PARAMETER));
+		return ResponseEntity.unprocessableEntity().body(new GeneralResponse(ResultStatus.INVALID_PARAMETER));
 	}
-
 
 	@ExceptionHandler(UnsupportedOperationException.class)
 	public final ResponseEntity<ResponseService> handleUnsupportedOperationException(UnsupportedOperationException ex) {
@@ -50,12 +48,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		logger.warn("constraint violation exception ", ex);
 		var response = new GeneralResponse(ResultStatus.INVALID_PARAMETER);
 		ex.getConstraintViolations()
-				.stream()
-				.findFirst()
-				.ifPresent(violation -> response.setResult(ResultStatus.INVALID_PARAMETER,
-						environment.getProperty(violation.getMessage())));
-		return ResponseEntity.unprocessableEntity()
-				.body(response);
+			.stream()
+			.findFirst()
+			.ifPresent(violation -> response.setResult(ResultStatus.INVALID_PARAMETER,
+					environment.getProperty(violation.getMessage())));
+		return ResponseEntity.unprocessableEntity().body(response);
 	}
 
 	@ExceptionHandler(Throwable.class)

@@ -1,5 +1,7 @@
 package com.bill.user.config;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
 	private final UserDetailsService userDetailsService;
@@ -25,25 +28,13 @@ public class WebSecurityConfig {
 
 	private final UserIdHeaderFilter userIdHeaderFilter;
 
-	public WebSecurityConfig(UserDetailsService userDetailsService,
-			JwtAuthenticationFilter jwtAuthenticationFilter,
-			UserIdHeaderFilter userIdHeaderFilter) {
-		this.userDetailsService = userDetailsService;
-		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-		this.userIdHeaderFilter = userIdHeaderFilter;
-	}
-
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity
-				.csrf(AbstractHttpConfigurer::disable)
-				.authorizeHttpRequests(
-						request -> request
-								.requestMatchers("api/users/register", "api/users/login")
-								.permitAll()
-								.anyRequest()
-								.authenticated()
-				)
+		httpSecurity.csrf(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(request -> request.requestMatchers("api/users/register", "api/users/login")
+						.permitAll()
+						.anyRequest()
+						.authenticated())
 				.httpBasic(Customizer.withDefaults())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.addFilterAfter(userIdHeaderFilter, JwtAuthenticationFilter.class);
@@ -65,9 +56,8 @@ public class WebSecurityConfig {
 	}
 
 	@Bean
-	public AuthenticationManager authenticationManager(
-			AuthenticationConfiguration configuration
-	) throws Exception {
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
 		return configuration.getAuthenticationManager();
 	}
+
 }

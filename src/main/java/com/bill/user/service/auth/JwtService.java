@@ -23,9 +23,6 @@ public class JwtService {
 	@Value("${jwt.secret-key}")
 	private String secretKey;
 
-	/**
-	 * Generate token with user ID claim
-	 */
 	public String generateToken(CustomUserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("userId", userDetails.getUserId());
@@ -38,14 +35,12 @@ public class JwtService {
 				.subject(subject)
 				.issuer("DCB")
 				.issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + 60 * 10 * 1000)) // 10 minutes
+				.expiration(new Date(System.currentTimeMillis() + 60 * 10 * 1000)) // 10
+				// minutes
 				.signWith(generateKey())
 				.compact();
 	}
 
-	/**
-	 * Extract user ID from token
-	 */
 	public Long extractUserId(String token) {
 		Claims claims = extractAllClaims(token);
 		return claims.get("userId", Long.class);
@@ -89,4 +84,5 @@ public class JwtService {
 	private Date extractExpiration(String token) {
 		return extractClaims(token, Claims::getExpiration);
 	}
+
 }

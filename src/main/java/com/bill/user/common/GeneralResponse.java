@@ -21,4 +21,5 @@ public class GeneralResponse extends ResponseService {
 	public String toString() {
 		return "GeneralResponse(super=" + super.toString() + ")";
 	}
+
 }

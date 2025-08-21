@@ -27,4 +27,5 @@ public class SecurityUtils {
 
 		throw new IllegalStateException("User ID not available");
 	}
+
 }

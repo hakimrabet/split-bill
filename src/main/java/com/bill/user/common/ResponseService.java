@@ -3,6 +3,7 @@ package com.bill.user.common;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ResponseService extends BaseService {
+
 	private Result result;
 
 	public ResponseService() {
@@ -54,4 +55,5 @@ public class ResponseService extends BaseService {
 	public String toString() {
 		return "ResponseService(result=" + this.getResult() + ")";
 	}
+
 }

@@ -8,4 +8,5 @@ INSERT INTO users (id, name, username, password)
 VALUES (1, 'John Doe', 'john.doe@example.com', 123),
        (2, 'Jane Smith', 'jane.smith@example.com', 123),
        (3, 'Bob Johnson', 'bob.johnson@example.com', 123)
-ON CONFLICT DO NOTHING;
+ON CONFLICT
+DO NOTHING;

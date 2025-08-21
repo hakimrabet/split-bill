@@ -3,7 +3,6 @@ package com.bill.user.common;
 import java.io.Serializable;
 
 public class Result implements Serializable {
-	private static final long serialVersionUID = 6091567334208093240L;
 
 	private ResultStatus title;
 
@@ -72,6 +71,8 @@ public class Result implements Serializable {
 
 	public String toString() {
 		ResultStatus var10000 = this.getTitle();
-		return "Result(title=" + var10000 + ", status=" + this.getStatus() + ", message=" + this.getMessage() + ", level=" + this.getLevel() + ")";
+		return "Result(title=" + var10000 + ", status=" + this.getStatus() + ", message=" + this.getMessage()
+				+ ", level=" + this.getLevel() + ")";
 	}
+
 }
