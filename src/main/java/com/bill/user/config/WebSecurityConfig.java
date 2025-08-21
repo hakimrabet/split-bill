@@ -31,10 +31,12 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf(AbstractHttpConfigurer::disable)
-				.authorizeHttpRequests(request -> request.requestMatchers("api/users/register", "api/users/login")
-						.permitAll()
-						.anyRequest()
-						.authenticated())
+				.authorizeHttpRequests(request ->
+						request.requestMatchers("/api/users/register", "/api/users/login",
+										"/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
+								.permitAll()
+								.anyRequest()
+								.authenticated())
 				.httpBasic(Customizer.withDefaults())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.addFilterAfter(userIdHeaderFilter, JwtAuthenticationFilter.class);
