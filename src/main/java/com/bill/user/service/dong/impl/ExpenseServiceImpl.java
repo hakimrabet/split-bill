@@ -1,6 +1,12 @@
 package com.bill.user.service.dong.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Queue;
 
 import com.bill.user.model.dong.Expense;
 import com.bill.user.model.dong.Group;
@@ -15,6 +21,7 @@ import com.bill.user.service.dong.model.EditExpenseModel;
 import com.bill.user.service.dong.model.ExpenseModel;
 import com.bill.user.service.dong.model.ExpenseResult;
 import com.bill.user.service.dong.model.GetAllExpenseResults;
+import com.bill.user.service.dong.model.SettleResult;
 import com.bill.user.service.dong.model.SplitResult;
 import com.bill.user.service.dong.model.UserGroupBalanceModel;
 import com.bill.user.service.dong.model.UserGroupBalanceResult;
@@ -104,6 +111,58 @@ public class ExpenseServiceImpl implements ExpenseService {
 	@Override
 	public void deleteExpenseById(String expenseId) {
 		expenseDao.deleteByExpenseId(expenseId);
+	}
+
+	@Transactional(readOnly = true)
+	public List<SettleResult> settleGroup(String groupId) {
+		List<Expense> expenses = expenseDao.findAllByGroupGroupId(groupId);
+
+		Map<Long, Long> balances = new HashMap<>();
+		for (Expense expense : expenses) {
+			for (Split split : expense.getSplits()) {
+				Long userId = split.getUser()
+						.getId();
+				Long credit = split.getCreditAmount() == null ? 0L : split.getCreditAmount();
+				Long debt = split.getDebtAmount() == null ? 0L : split.getDebtAmount();
+				balances.merge(userId, credit - debt, Long::sum);
+			}
+		}
+
+		Queue<Entry<Long, Long>> debtors = new LinkedList<>();
+		Queue<Map.Entry<Long, Long>> creditors = new LinkedList<>();
+
+//		Queue<Pair<Long, Long>> debtors = new LinkedList<>();
+//		Queue<Pair<Long, Long>> creditors = new LinkedList<>();
+
+		for (Map.Entry<Long, Long> e : balances.entrySet()) {
+			if (e.getValue() < 0) {
+				debtors.add(Map.entry(e.getKey(), -e.getValue()));
+			} else if (e.getValue() > 0) {
+				creditors.add(Map.entry(e.getKey(), e.getValue()));
+			}
+		}
+
+		List<SettleResult> instructions = new ArrayList<>();
+
+		while (!debtors.isEmpty() && !creditors.isEmpty()) {
+			Map.Entry<Long, Long> debtor = debtors.poll();
+			Map.Entry<Long, Long> creditor = creditors.poll();
+
+			Long payAmount = Math.min(debtor.getValue(), creditor.getValue());
+
+			instructions.add(new SettleResult(
+					debtor.getKey(), creditor.getKey(), payAmount
+			));
+
+			if (debtor.getValue() > payAmount) {
+				debtors.add(Map.entry(debtor.getKey(), debtor.getValue() - payAmount));
+			}
+			if (creditor.getValue() > payAmount) {
+				creditors.add(Map.entry(creditor.getKey(), creditor.getValue() - payAmount));
+			}
+		}
+
+		return instructions;
 	}
 
 }
