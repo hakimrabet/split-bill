@@ -73,7 +73,7 @@ class ExpenseControllerIT extends AbstractContainerBaseTest {
 
         assertThat(response).isNotNull();
         assertThat(response.getBody().getResult().getTitle()).isEqualTo(ResultStatus.SUCCESS);
-        assertThat(response.getBody().getExpense()).isEqualTo(ResultStatus.SUCCESS);
+        assertThat(response.getBody().getExpense()).isNotNull();
 
         assertThat(response.getBody().getExpense().getExpenseId()).isNotBlank();
         assertThat(response.getBody().getExpense().getGroupId()).isEqualTo("group-id");
@@ -81,7 +81,6 @@ class ExpenseControllerIT extends AbstractContainerBaseTest {
         assertThat(response.getBody().getExpense().getDescription()).isEqualTo("joje");
         assertThat(response.getBody().getExpense().getType()).isEqualTo(Type.SHOP);
         assertThat(response.getBody().getExpense().getSplits()).hasSize(3);
-
 
         assertThat(response.getBody().getExpense().getSplits().get(0).getCreditAmount()).isEqualTo(200000L);
         assertThat(response.getBody().getExpense().getSplits().get(0).getDebtAmount()).isEqualTo(0L);
