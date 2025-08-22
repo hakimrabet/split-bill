@@ -158,7 +158,6 @@ class ExpenseControllerIT extends AbstractContainerBaseTest {
 
         assertThat(response.getBody().getExpense().getSplits().get(2).getCreditAmount()).isEqualTo(0L);
         assertThat(response.getBody().getExpense().getSplits().get(2).getDebtAmount()).isEqualTo(100000L);
-
     }
 
     @Test
@@ -205,9 +204,9 @@ class ExpenseControllerIT extends AbstractContainerBaseTest {
         expense1.setCreationDate(System.currentTimeMillis());
         expense1.setLastModificationDate(System.currentTimeMillis());
 
-        Split split1 = new Split(null, "split-1", users.get(0), null, 200_000L, 0L, null);
-        Split split2 = new Split(null, "split-2", users.get(1), null, 0L, 100_000L, null);
-        Split split3 = new Split(null, "split-3", users.get(2), null, 0L, 100_000L, null);
+        Split split1 = new Split(null, "split-1", users.get(0), 200_000L, 0L, null);
+        Split split2 = new Split(null, "split-2", users.get(1), 0L, 100_000L, null);
+        Split split3 = new Split(null, "split-3", users.get(2), 0L, 100_000L, null);
 
         expense1.addSplit(split1);
         expense1.addSplit(split2);

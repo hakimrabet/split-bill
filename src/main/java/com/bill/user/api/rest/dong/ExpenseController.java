@@ -47,14 +47,14 @@ public class ExpenseController {
 		return ResponseEntity.ok(mapper.toExpenseResponse(result));
 	}
 
-	@PutMapping(path = "/{expenseId}", consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ExpenseResponse> editExpense(@PathVariable("expenseId") String expenseId,
-			@Valid @RequestBody EditExpenseRequest request) {
-		EditExpenseModel model = mapper.toEditExpenseModel(expenseId, request);
-		ExpenseResult response = expenseService.editExpense(model);
-		return ResponseEntity.ok(mapper.toExpenseResponse(response));
-	}
+//	@PutMapping(path = "/{expenseId}", consumes = MediaType.APPLICATION_JSON_VALUE,
+//			produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ResponseEntity<ExpenseResponse> editExpense(@PathVariable("expenseId") String expenseId,
+//			@Valid @RequestBody EditExpenseRequest request) {
+//		EditExpenseModel model = mapper.toEditExpenseModel(expenseId, request);
+//		ExpenseResult response = expenseService.editExpense(model);
+//		return ResponseEntity.ok(mapper.toExpenseResponse(response));
+//	}
 
 	@GetMapping(path = "/{groupId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<GetAllExpenseResponse> getExpenseByGroupId(@PathVariable("groupId") String groupId) {

@@ -38,14 +38,14 @@ public class Split implements Serializable {
 	@Column(nullable = false, unique = true)
 	private String splitId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "expense_id", nullable = false)
-	@JsonBackReference
-	private Expense expense;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "expense_id", nullable = false)
+//	@JsonBackReference
+//	private Expense expense;
 
 	@Column(nullable = false)
 	private Long creditAmount;
