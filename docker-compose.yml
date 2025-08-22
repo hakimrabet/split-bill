@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: bill
       POSTGRES_PASSWORD: password
     volumes:
-      - postgres-user-data:/var/lib/postgresql/data
+      - ./postgres-user-data:/var/lib/postgresql/data
     ports:
       - "5431:5432"  # Map host port 5431 to container port 5432
     healthcheck:
