@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Queue;
 
 import com.bill.user.model.dong.Expense;
@@ -21,6 +20,7 @@ import com.bill.user.service.dong.model.EditExpenseModel;
 import com.bill.user.service.dong.model.ExpenseModel;
 import com.bill.user.service.dong.model.ExpenseResult;
 import com.bill.user.service.dong.model.GetAllExpenseResults;
+import com.bill.user.service.dong.model.SettleDto;
 import com.bill.user.service.dong.model.SettleResult;
 import com.bill.user.service.dong.model.SplitResult;
 import com.bill.user.service.dong.model.UserGroupBalanceModel;
@@ -114,7 +114,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<SettleResult> settleGroup(String groupId) {
+	public SettleResult settleGroup(String groupId) {
 		List<Expense> expenses = expenseDao.findAllByGroupGroupId(groupId);
 
 		Map<Long, Long> balances = new HashMap<>();
@@ -142,7 +142,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 			}
 		}
 
-		List<SettleResult> instructions = new ArrayList<>();
+		List<SettleDto> instructions = new ArrayList<>();
 
 		while (!debtors.isEmpty() && !creditors.isEmpty()) {
 			Map.Entry<Long, Long> debtor = debtors.poll();
@@ -150,7 +150,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
 			Long payAmount = Math.min(debtor.getValue(), creditor.getValue());
 
-			instructions.add(new SettleResult(
+			instructions.add(new SettleDto(
 					debtor.getKey(), creditor.getKey(), payAmount
 			));
 
@@ -162,7 +162,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 			}
 		}
 
-		return instructions;
+		return mapper.toSettleResult(instructions, null);
 	}
 
 }

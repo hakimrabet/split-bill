@@ -5,6 +5,7 @@ import com.bill.user.api.rest.dong.model.request.AddExpenseRequest;
 import com.bill.user.api.rest.dong.model.request.EditExpenseRequest;
 import com.bill.user.api.rest.dong.model.response.ExpenseResponse;
 import com.bill.user.api.rest.dong.model.response.GetAllExpenseResponse;
+import com.bill.user.api.rest.dong.model.response.SettleResponse;
 import com.bill.user.api.rest.dong.model.response.UserGroupBalanceResponse;
 import com.bill.user.common.GeneralResponse;
 import com.bill.user.service.dong.ExpenseService;
@@ -12,6 +13,7 @@ import com.bill.user.service.dong.model.EditExpenseModel;
 import com.bill.user.service.dong.model.ExpenseModel;
 import com.bill.user.service.dong.model.ExpenseResult;
 import com.bill.user.service.dong.model.GetAllExpenseResults;
+import com.bill.user.service.dong.model.SettleResult;
 import com.bill.user.service.dong.model.UserGroupBalanceResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -79,6 +81,14 @@ public class ExpenseController {
 	public ResponseEntity<GeneralResponse> delete(@PathVariable("expenseId") String expenseId) {
 		expenseService.deleteExpenseById(expenseId);
 		return ResponseEntity.ok(GeneralResponse.success());
+	}
+
+	@GetMapping(path = "/settle/{groupId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<SettleResponse> getSettleByGroup(@RequestHeader("X-User-Id") String userId,
+			@PathVariable(name = "groupId") String groupId) {
+		SettleResult settleResult = expenseService.settleGroup(groupId);
+		SettleResponse response = mapper.toSettleResponse(settleResult);
+		return ResponseEntity.ok(response);
 	}
 
 }

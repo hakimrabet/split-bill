@@ -12,6 +12,8 @@ import com.bill.user.service.dong.model.EditExpenseModel;
 import com.bill.user.service.dong.model.ExpenseModel;
 import com.bill.user.service.dong.model.ExpenseResult;
 import com.bill.user.service.dong.model.GetAllExpenseResults;
+import com.bill.user.service.dong.model.SettleDto;
+import com.bill.user.service.dong.model.SettleResult;
 import com.bill.user.service.dong.model.SplitResult;
 import com.bill.user.util.TrackingCodeProvider;
 import org.mapstruct.BeanMapping;
@@ -60,4 +62,7 @@ public interface ExpenseServiceMapper {
 		split.setSplitId(TrackingCodeProvider.generate());
 		return split;
 	}
+
+	@Mapping(target = "settles", source = "instructions")
+	SettleResult toSettleResult(List<SettleDto> instructions, Object dummy);
 }

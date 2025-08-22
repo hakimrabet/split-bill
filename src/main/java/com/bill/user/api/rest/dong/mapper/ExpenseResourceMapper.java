@@ -6,12 +6,14 @@ import com.bill.user.api.rest.dong.model.request.SplitDto;
 import com.bill.user.api.rest.dong.model.response.ExpenseDto;
 import com.bill.user.api.rest.dong.model.response.ExpenseResponse;
 import com.bill.user.api.rest.dong.model.response.GetAllExpenseResponse;
+import com.bill.user.api.rest.dong.model.response.SettleResponse;
 import com.bill.user.api.rest.dong.model.response.UserGroupBalanceResponse;
 import com.bill.user.common.ResultStatus;
 import com.bill.user.service.dong.model.EditExpenseModel;
 import com.bill.user.service.dong.model.ExpenseModel;
 import com.bill.user.service.dong.model.ExpenseResult;
 import com.bill.user.service.dong.model.GetAllExpenseResults;
+import com.bill.user.service.dong.model.SettleResult;
 import com.bill.user.service.dong.model.SplitResult;
 import com.bill.user.service.dong.model.UserGroupBalanceModel;
 import com.bill.user.service.dong.model.UserGroupBalanceResult;
@@ -70,4 +72,7 @@ public interface ExpenseResourceMapper {
 	@Mapping(target = "creditAmount", source = "creditAmount")
 	SplitDto toSplitDto(SplitResult result);
 
+	@Mapping(target = "settles", source = "settles")
+	@Mapping(target = "result", expression = "java(ResultStatus.SUCCESS)")
+	SettleResponse toSettleResponse(SettleResult settleResult);
 }
