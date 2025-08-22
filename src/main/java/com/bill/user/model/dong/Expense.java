@@ -5,9 +5,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -19,14 +22,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.Version;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -47,6 +52,7 @@ public class Expense implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "group_id", nullable = false)
+	@JsonBackReference
 	private Group group;
 
 	@Column(nullable = false)
@@ -58,6 +64,7 @@ public class Expense implements Serializable {
 	private Type type;
 
 	@OneToMany(mappedBy = "expense", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
 	private List<Split> splits = new ArrayList<>();
 
 	@CreatedDate
@@ -70,5 +77,10 @@ public class Expense implements Serializable {
 
 	@Version
 	private Long version;
+
+	public void addSplit(Split split) {
+		split.setExpense(this);
+		this.splits.add(split);
+	}
 
 }

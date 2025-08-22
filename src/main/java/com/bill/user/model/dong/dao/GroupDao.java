@@ -15,7 +15,7 @@ public interface GroupDao extends JpaRepository<Group, Long> {
 
 	Group findByGroupId(String groupId);
 
-	@Query("SELECT g FROM Group g JOIN g.members m WHERE m.id = :userId")
+	@Query("SELECT g FROM Group g JOIN g.members m WHERE m.id = :id")
 	List<Group> findAllByMembers_Id(Long id);
 
 	Optional<Group> findByGroupIdAndMembersContains(String groupId, User member);

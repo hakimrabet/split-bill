@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bill.user.model.user.User;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,15 +19,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.Version;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -51,6 +57,10 @@ public class Group implements Serializable {
 			inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private List<User> members = new ArrayList<>();
 
+	@JsonManagedReference
+	@OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Expense> expenses = new ArrayList<>();
+
 	private String icon;
 
 	private String description;
@@ -64,6 +74,7 @@ public class Group implements Serializable {
 	private Long lastModificationDate;
 
 	@Version
+	@Column(name = "version")
 	private Long version;
 
 	public void addMembers(List<User> users) {

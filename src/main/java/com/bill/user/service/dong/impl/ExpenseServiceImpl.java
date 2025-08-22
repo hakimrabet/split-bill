@@ -7,12 +7,15 @@ import com.bill.user.model.dong.Group;
 import com.bill.user.model.dong.Split;
 import com.bill.user.model.dong.dao.ExpenseDao;
 import com.bill.user.model.dong.dao.GroupDao;
+import com.bill.user.model.user.User;
+import com.bill.user.model.user.dao.UserDao;
 import com.bill.user.service.dong.ExpenseService;
 import com.bill.user.service.dong.mapper.ExpenseServiceMapper;
 import com.bill.user.service.dong.model.EditExpenseModel;
 import com.bill.user.service.dong.model.ExpenseModel;
 import com.bill.user.service.dong.model.ExpenseResult;
 import com.bill.user.service.dong.model.GetAllExpenseResults;
+import com.bill.user.service.dong.model.SplitResult;
 import com.bill.user.service.dong.model.UserGroupBalanceModel;
 import com.bill.user.service.dong.model.UserGroupBalanceResult;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +34,20 @@ public class ExpenseServiceImpl implements ExpenseService {
 
 	private final ExpenseServiceMapper mapper;
 
+	private final UserDao userDao;
+
 	@Override
 	public ExpenseResult addExpense(ExpenseModel model) {
 		Group group = groupDao.findByGroupId(model.getGroupId());
 		Expense expense = mapper.toExpense(model, group);
-		Expense expenseFromDb = expenseDao.save(expense);
+		for (SplitResult s : model.getSplits()) {
+			User user = userDao.findById(s.getUserId())
+					.orElseThrow(() -> new IllegalArgumentException("group id not valid"));
+			Split split = mapper.toSplit(s, user);
+			split.setExpense(expense);
+			expense.addSplit(split);
+		}
+		Expense expenseFromDb = expenseDao.saveAndFlush(expense);
 		return mapper.toExpenseResult(expenseFromDb);
 	}
 
