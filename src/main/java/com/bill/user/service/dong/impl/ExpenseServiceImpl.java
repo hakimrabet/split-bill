@@ -128,7 +128,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 			}
 		}
 
-		Queue<Entry<Long, Long>> debtors = new LinkedList<>();
+		Queue<Map.Entry<Long, Long>> debtors = new LinkedList<>();
 		Queue<Map.Entry<Long, Long>> creditors = new LinkedList<>();
 
 //		Queue<Pair<Long, Long>> debtors = new LinkedList<>();
