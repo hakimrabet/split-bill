@@ -1,5 +1,6 @@
 package com.bill.user;
 
+import com.bill.user.AbstractContainerBaseTest.TestSecurityConfig;
 import org.junit.jupiter.api.BeforeAll;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -12,10 +13,15 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 @TestPropertySource(locations = { "classpath:application-test.properties", "classpath:error-messages.properties" })
 @Testcontainers
@@ -25,6 +31,9 @@ import org.springframework.test.context.TestPropertySource;
 				"spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration,org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration"
 		}
 )
+@ActiveProfiles({ "test" })
+@Import(TestSecurityConfig.class)
+@Sql(scripts = "/data.sql", executionPhase = ExecutionPhase.BEFORE_TEST_CLASS)
 public abstract class AbstractContainerBaseTest {
 
 	@Autowired
@@ -54,6 +63,8 @@ public abstract class AbstractContainerBaseTest {
 
 	@TestConfiguration
 	static class TestSecurityConfig {
+
+		@Primary
 		@Bean
 		public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 			http.csrf(AbstractHttpConfigurer::disable)
