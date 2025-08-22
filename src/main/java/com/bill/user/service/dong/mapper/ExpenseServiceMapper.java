@@ -29,6 +29,9 @@ public interface ExpenseServiceMapper {
     @Mapping(target = "groupId", source = "group.groupId")
     ExpenseResult toExpenseResult(Expense expense);
 
+    @Mapping(target = "userId", source = "user.id")
+    SplitResult toSplitResult(Split split);
+
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "description", source = "model.description")
     @Mapping(target = "type", source = "model.type")

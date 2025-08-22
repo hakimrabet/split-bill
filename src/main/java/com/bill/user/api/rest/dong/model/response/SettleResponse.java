@@ -1,14 +1,18 @@
 package com.bill.user.api.rest.dong.model.response;
 
-import java.util.List;
-
 import com.bill.user.common.ResponseService;
 import com.bill.user.service.dong.model.SettleDto;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+import java.util.List;
+
+@Setter
+@Getter
+@ToString
 public class SettleResponse extends ResponseService {
 
-	private List<SettleDto> settles;
+    private List<SettleDto> settles;
 
 }

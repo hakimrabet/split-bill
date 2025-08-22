@@ -175,6 +175,8 @@
 						<include>**/*Test.java</include>
 						<include>**/*IT.java</include>
 					</includes>
+                    <parallel>none</parallel>
+                    <reuseForks>false</reuseForks>
 				</configuration>
 			</plugin>
 		</plugins>
