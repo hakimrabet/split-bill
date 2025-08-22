@@ -19,7 +19,7 @@ public class AddGroupRequest extends RequestService {
 	@NotBlank
 	private String name;
 
-	private List<String> members = new ArrayList<>();
+	private List<Long> members = new ArrayList<>();
 
 	private String icon;
 
