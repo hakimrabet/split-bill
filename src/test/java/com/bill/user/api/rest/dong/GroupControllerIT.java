@@ -1,93 +1,291 @@
 package com.bill.user.api.rest.dong;
 
-import java.util.List;
-
 import com.bill.user.AbstractContainerBaseTest;
+import com.bill.user.api.rest.dong.model.request.AddGroupMemberRequest;
 import com.bill.user.api.rest.dong.model.request.AddGroupRequest;
+import com.bill.user.api.rest.dong.model.request.EditGroupRequest;
+import com.bill.user.api.rest.dong.model.response.GetAllGroupResponse;
 import com.bill.user.api.rest.dong.model.response.GroupResponse;
+import com.bill.user.common.GeneralResponse;
 import com.bill.user.common.ResultStatus;
+import com.bill.user.model.dong.Group;
 import com.bill.user.model.dong.dao.GroupDao;
+import com.bill.user.model.user.User;
+import com.bill.user.model.user.dao.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class GroupControllerIT extends AbstractContainerBaseTest {
 
-	@Autowired
-	GroupDao groupDao;
+    @Autowired
+    GroupDao groupDao;
 
-	@BeforeEach
-	void setUp() {
-		groupDao.deleteAll();
-	}
+    @Autowired
+    private UserDao userDao;
 
-	@Test
-	void addGroup() {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("X-User-Id", "1");
+    @BeforeEach
+    void setUp() {
+        groupDao.deleteAll();
+    }
 
-		AddGroupRequest request = new AddGroupRequest();
-		request.setName("group name");
-		request.setDescription("group desc");
-		request.setIcon("group-icon");
-		request.setMembers(List.of(1L, 2L, 3L));
+    @Test
+    void addGroup() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-User-Id", "1");
 
-		HttpEntity<Object> entity = new HttpEntity<>(request, headers);
+        AddGroupRequest request = new AddGroupRequest();
+        request.setName("group name");
+        request.setDescription("group desc");
+        request.setIcon("group-icon");
+        request.setMembers(List.of(1L, 2L, 3L));
 
-		ResponseEntity<GroupResponse> response = restTemplate.exchange("/split/groups",
-				HttpMethod.POST, entity, GroupResponse.class);
+        HttpEntity<Object> entity = new HttpEntity<>(request, headers);
 
-		assertThat(response).isNotNull();
-		assertThat(response.getBody()
-				.getResult()
-				.getTitle()).isEqualTo(ResultStatus.SUCCESS);
-		assertThat(response.getBody()
-				.getGroup()
-				.getCreatedBy()).isEqualTo(1L);
-		assertThat(response.getBody()
-				.getGroup()
-				.getCreationDate()).isNotNull();
-		assertThat(response.getBody()
-				.getGroup()
-				.getDescription()).isEqualTo("group desc");
-		assertThat(response.getBody()
-				.getGroup()
-				.getGroupId()).isNotNull();
-		assertThat(response.getBody()
-				.getGroup()
-				.getIcon()).isEqualTo("group-icon");
-		assertThat(response.getBody()
-				.getGroup()
-				.getMembers()).contains(1L, 2L, 3L);
-		assertThat(response.getBody()
-				.getGroup()
-				.getName()).isEqualTo("group name");
-	}
+        ResponseEntity<GroupResponse> response = restTemplate.exchange("/split/groups",
+                HttpMethod.POST, entity, GroupResponse.class);
 
-	@Test
-	void getAllGroupByUserId() {
-	}
+        assertThat(response).isNotNull();
+        assertThat(response.getBody()
+                .getResult()
+                .getTitle()).isEqualTo(ResultStatus.SUCCESS);
+        assertThat(response.getBody()
+                .getGroup()
+                .getCreatedBy()).isEqualTo(1L);
+        assertThat(response.getBody()
+                .getGroup()
+                .getCreationDate()).isNotNull();
+        assertThat(response.getBody()
+                .getGroup()
+                .getDescription()).isEqualTo("group desc");
+        assertThat(response.getBody()
+                .getGroup()
+                .getGroupId()).isNotNull();
+        assertThat(response.getBody()
+                .getGroup()
+                .getIcon()).isEqualTo("group-icon");
+        assertThat(response.getBody()
+                .getGroup()
+                .getMembers()).contains(1L, 2L, 3L);
+        assertThat(response.getBody()
+                .getGroup()
+                .getName()).isEqualTo("group name");
+    }
 
-	@Test
-	void getByGroupId() {
-	}
+    @Test
+    void getAllGroupByUserId() {
+        createGroup();
 
-	@Test
-	void addMembers() {
-	}
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-User-Id", "1");
 
-	@Test
-	void deleteGroup() {
-	}
+        HttpEntity<Object> entity = new HttpEntity<>(headers);
 
-	@Test
-	void edit() {
-	}
+        ResponseEntity<GetAllGroupResponse> response = restTemplate.exchange("/split/groups",
+                HttpMethod.GET, entity, GetAllGroupResponse.class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getBody()
+                .getResult()
+                .getTitle()).isEqualTo(ResultStatus.SUCCESS);
+
+        assertThat(response.getBody()
+                .getGroups()).hasSize(1);
+        assertThat(response.getBody()
+                .getGroups()
+                .getFirst()
+                .getName()).isEqualTo("group-name");
+        assertThat(response.getBody()
+                .getGroups()
+                .getFirst()
+                .getMembers()).contains(1L, 2L);
+        assertThat(response.getBody()
+                .getGroups()
+                .getFirst()
+                .getIcon()).isEqualTo("icon");
+        assertThat(response.getBody()
+                .getGroups()
+                .getFirst()
+                .getGroupId()).isEqualTo("group-id");
+        assertThat(response.getBody()
+                .getGroups()
+                .getFirst()
+                .getCreatedBy()).isEqualTo(1L);
+        assertThat(response.getBody()
+                .getGroups()
+                .getFirst()
+                .getDescription()).isEqualTo("group desc");
+    }
+
+
+    @Test
+    void getByGroupId() {
+        createGroup();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-User-Id", "1");
+
+        HttpEntity<Object> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<GroupResponse> response = restTemplate.exchange("/split/groups/group-id",
+                HttpMethod.GET, entity, GroupResponse.class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getBody()
+                .getResult()
+                .getTitle()).isEqualTo(ResultStatus.SUCCESS);
+
+        assertThat(response.getBody()
+                .getGroup()
+                .getName()).isEqualTo("group-name");
+        assertThat(response.getBody()
+                .getGroup()
+                .getMembers()).contains(1L, 2L);
+        assertThat(response.getBody()
+                .getGroup()
+                .getIcon()).isEqualTo("icon");
+        assertThat(response.getBody()
+                .getGroup()
+                .getGroupId()).isEqualTo("group-id");
+        assertThat(response.getBody()
+                .getGroup()
+                .getCreatedBy()).isEqualTo(1L);
+        assertThat(response.getBody()
+                .getGroup()
+                .getDescription()).isEqualTo("group desc");
+    }
+
+    @Test
+    void addMembers() {
+        createGroup();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-User-Id", "1");
+
+        AddGroupMemberRequest request = new AddGroupMemberRequest();
+        request.setMembers(List.of(3L));
+
+        HttpEntity<Object> entity = new HttpEntity<>(request, headers);
+
+        ResponseEntity<GroupResponse> response = restTemplate.exchange("/split/groups/group-id/members",
+                HttpMethod.POST, entity, GroupResponse.class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getBody()
+                .getResult()
+                .getTitle()).isEqualTo(ResultStatus.SUCCESS);
+
+        assertThat(response.getBody()
+                .getGroup()
+                .getName()).isEqualTo("group-name");
+        assertThat(response.getBody()
+                .getGroup()
+                .getMembers()).contains(1L, 2L, 3L);
+        assertThat(response.getBody()
+                .getGroup()
+                .getIcon()).isEqualTo("icon");
+        assertThat(response.getBody()
+                .getGroup()
+                .getGroupId()).isEqualTo("group-id");
+        assertThat(response.getBody()
+                .getGroup()
+                .getCreatedBy()).isEqualTo(1L);
+        assertThat(response.getBody()
+                .getGroup()
+                .getDescription()).isEqualTo("group desc");
+    }
+
+    @Test
+    void deleteGroup() {
+        createGroup();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-User-Id", "1");
+
+        HttpEntity<Object> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<GeneralResponse> response = restTemplate.exchange("/split/groups/group-id",
+                HttpMethod.DELETE, entity, GeneralResponse.class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getBody()
+                .getResult()
+                .getTitle()).isEqualTo(ResultStatus.SUCCESS);
+
+        List<Group> groups = groupDao.findAll();
+        assertThat(groups).isEmpty();
+    }
+
+    @Test
+    void edit() {
+        createGroup();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-User-Id", "1");
+
+        EditGroupRequest request = new EditGroupRequest();
+        request.setDescription("new desc");
+        request.setName("new name");
+
+        HttpEntity<Object> entity = new HttpEntity<>(request, headers);
+
+        ResponseEntity<GroupResponse> response = restTemplate.exchange("/split/groups/group-id",
+                HttpMethod.PUT, entity, GroupResponse.class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getBody()
+                .getResult()
+                .getTitle()).isEqualTo(ResultStatus.SUCCESS);
+
+        assertThat(response.getBody().getGroup()
+                .getName()).isEqualTo("new name");
+        assertThat(response.getBody().getGroup()
+                .getDescription()).isEqualTo("new desc");
+
+    }
+
+
+    private void createGroup() {
+        List<User> users = userDao.findAllByIdIn(List.of(1L, 2L));
+
+//		Expense expense1 = new Expense();
+//		expense1.setExpenseId(TrackingCodeProvider.generate());
+//		expense1.setAmount(200_000L);
+//		expense1.setDescription("Expense 1 description");
+//		expense1.setType(Type.SHOP);
+//		expense1.setCreationDate(System.currentTimeMillis());
+//		expense1.setLastModificationDate(System.currentTimeMillis());
+//
+//		Expense expense2 = new Expense();
+//		expense2.setExpenseId(TrackingCodeProvider.generate());
+//		expense2.setAmount(100_000L);
+//		expense2.setDescription("Expense 2 description");
+//		expense2.setType(Type.SHOP);
+//		expense2.setCreationDate(System.currentTimeMillis());
+//		expense2.setLastModificationDate(System.currentTimeMillis());
+//
+//		Expense expense3 = new Expense();
+//		expense3.setExpenseId(TrackingCodeProvider.generate());
+//		expense3.setAmount(100_000L);
+//		expense3.setDescription("Expense 3 description");
+//		expense3.setType(Type.SHOP);
+//		expense3.setCreationDate(System.currentTimeMillis());
+//		expense3.setLastModificationDate(System.currentTimeMillis());
+//
+//		List<Expense> expenses = expenseDao.saveAll(List.of(expense1, expense2, expense3));
+
+        Group group = new Group(null, "group-id", "group-name", users.getFirst(), users,
+                null, "icon", "group desc", null,
+                null, null);
+
+        groupDao.save(group);
+    }
 }

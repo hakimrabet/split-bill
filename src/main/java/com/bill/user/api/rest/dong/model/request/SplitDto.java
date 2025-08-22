@@ -11,7 +11,7 @@ public class SplitDto {
 
 	private String expenseId;
 
-	private String userId;
+	private Long userId;
 
 	private Long creditAmount;
 

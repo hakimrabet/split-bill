@@ -1,5 +1,8 @@
 package com.bill.user.common;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class GeneralResponse extends ResponseService {
 
 	public GeneralResponse(ResultStatus resultStatus) {

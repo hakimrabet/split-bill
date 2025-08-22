@@ -1,4 +1,3 @@
-
 package com.bill.user.api.rest.dong.model.request;
 
 import java.util.List;
@@ -14,6 +13,6 @@ import lombok.ToString;
 @ToString
 public class AddGroupMemberRequest extends RequestService {
 
-	private List<String> members;
+	private List<Long> members;
 
 }
