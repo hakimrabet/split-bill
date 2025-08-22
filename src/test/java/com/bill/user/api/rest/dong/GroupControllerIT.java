@@ -256,32 +256,6 @@ class GroupControllerIT extends AbstractContainerBaseTest {
     private void createGroup() {
         List<User> users = userDao.findAllByIdIn(List.of(1L, 2L));
 
-//		Expense expense1 = new Expense();
-//		expense1.setExpenseId(TrackingCodeProvider.generate());
-//		expense1.setAmount(200_000L);
-//		expense1.setDescription("Expense 1 description");
-//		expense1.setType(Type.SHOP);
-//		expense1.setCreationDate(System.currentTimeMillis());
-//		expense1.setLastModificationDate(System.currentTimeMillis());
-//
-//		Expense expense2 = new Expense();
-//		expense2.setExpenseId(TrackingCodeProvider.generate());
-//		expense2.setAmount(100_000L);
-//		expense2.setDescription("Expense 2 description");
-//		expense2.setType(Type.SHOP);
-//		expense2.setCreationDate(System.currentTimeMillis());
-//		expense2.setLastModificationDate(System.currentTimeMillis());
-//
-//		Expense expense3 = new Expense();
-//		expense3.setExpenseId(TrackingCodeProvider.generate());
-//		expense3.setAmount(100_000L);
-//		expense3.setDescription("Expense 3 description");
-//		expense3.setType(Type.SHOP);
-//		expense3.setCreationDate(System.currentTimeMillis());
-//		expense3.setLastModificationDate(System.currentTimeMillis());
-//
-//		List<Expense> expenses = expenseDao.saveAll(List.of(expense1, expense2, expense3));
-
         Group group = new Group(null, "group-id", "group-name", users.getFirst(), users,
                 null, "icon", "group desc", null,
                 null, null);
