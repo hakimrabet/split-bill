@@ -10,10 +10,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.bill</groupId>
-    <artifactId>user</artifactId>
+    <groupId>com.hakim</groupId>
+    <artifactId>bill</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>user</name>
+    <name>bill</name>
     <description>assignment</description>
 
     <properties>
