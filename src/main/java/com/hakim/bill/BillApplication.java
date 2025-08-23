@@ -15,10 +15,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories
 @SpringBootApplication
 @PropertySource({ "classpath:error-messages.properties" })
-public class UserApplication {
+public class BillApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(UserApplication.class, args);
+		SpringApplication.run(BillApplication.class, args);
 	}
 
 	@Bean
